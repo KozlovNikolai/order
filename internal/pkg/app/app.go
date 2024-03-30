@@ -2,25 +2,29 @@ package app
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/KozlovNikolai/order/internal/endpoint"
-	timecalc "github.com/KozlovNikolai/order/internal/service"
+	"github.com/KozlovNikolai/order/internal/service/timecalc"
 )
 
 type App struct {
-	e *endpoint.Endpoint
-	s *timecalc.TimeCalc
+	e  *endpoint.Endpoint
+	tc *timecalc.TimeCalc
 }
 
 func New() (*App, error) {
 	a := &App{}
-	a.e = endpoint.New()
-	a.s = timecalc.New()
+	a.tc = timecalc.New()
+	a.e = endpoint.New(a.tc)
 	return a, nil
 }
 
 func (a *App) Run() error {
 	fmt.Println("App running.")
-
+	err := a.e.Status()
+	if err != nil {
+		log.Fatalln(err)
+	}
 	return nil
 }
