@@ -8,6 +8,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
+// Specification is base structure of package
 type Specification struct {
 	Debug      bool
 	Port       int
@@ -18,6 +19,7 @@ type Specification struct {
 	ColorCodes map[string]int
 }
 
+// ReadConfig reads config fron enviroments
 func ReadConfig() {
 	fmt.Printf("\nЧтение переменных окружения:\n")
 	var s Specification

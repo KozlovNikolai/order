@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 	"testing"
 
@@ -10,10 +11,18 @@ import (
 func TestLoad(t *testing.T) {
 	require := require.New(t)
 
-	os.Setenv("SCYLLA_HOSTS", "host1.com,host2.com")
-	os.Setenv("SCYLLA_MIGRATIONS_DIR", "./cql")
-	os.Setenv("SCYLLA_KEYSPACE", "reporting")
-
+	err := os.Setenv("SCYLLA_HOSTS", "host1.com,host2.com")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = os.Setenv("SCYLLA_MIGRATIONS_DIR", "./cql")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = os.Setenv("SCYLLA_KEYSPACE", "reporting")
+	if err != nil {
+		log.Fatal(err)
+	}
 	actual, err := Load()
 	require.NoError(err)
 
