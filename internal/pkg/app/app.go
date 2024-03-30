@@ -8,11 +8,13 @@ import (
 	"github.com/KozlovNikolai/order/internal/service/timecalc"
 )
 
+// App is base structure of package
 type App struct {
 	e  *endpoint.Endpoint
 	tc *timecalc.TimeCalc
 }
 
+// New is constructor of app object
 func New() (*App, error) {
 	a := &App{}
 	a.tc = timecalc.New()
@@ -20,6 +22,7 @@ func New() (*App, error) {
 	return a, nil
 }
 
+// Run stars programm
 func (a *App) Run() error {
 	fmt.Println("App running.")
 	err := a.e.Status()
