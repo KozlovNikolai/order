@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/KozlovNikolai/order/internal/pkg/app"
+	"github.com/KozlovNikolai/order/internal/service/readconfig"
 )
 
 func main() {
@@ -16,4 +17,6 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+	readconfig.ReadConfig()
 }
