@@ -6,6 +6,13 @@ install-golangci-lint:
 lint:
 	GOBIN=$(LOCAL_BIN) $(LOCAL_BIN)/golangci-lint run ./... --config .golangci.pipeline.yaml
 
+docker-local-build-and-run:
+	-docker stop order
+	-docker rm order
+	-docker rmi order:v0.0.1
+	docker buildx build --no-cache --platform linux/amd64 -t order:v0.0.1 .
+	docker run --name order -p 50051:50051 order:v0.0.1
+
 # install-deps:
 # 	GOBIN=$(LOCAL_BIN) go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1
 # 	GOBIN=$(LOCAL_BIN) go install -mod=mod google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
