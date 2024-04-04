@@ -1,22 +1,36 @@
 package main
 
 import (
-	"log"
+	"time"
 
-	"github.com/KozlovNikolai/order/internal/pkg/app"
-	"github.com/KozlovNikolai/order/internal/service/readconfig"
+	"github.com/KozlovNikolai/order/configs"
+	"go.uber.org/zap"
 )
 
+var sugar *zap.SugaredLogger
+
+func init() {
+	sugar = zap.NewExample().Sugar()
+	defer sugar.Sync()
+
+}
+
 func main() {
-	a, err := app.New()
-	if err != nil {
-		log.Fatalln(err)
-	}
+	sugar.Info("Приложение запущено")
 
-	err = a.Run()
+	err := configs.ReadConfig()
 	if err != nil {
-		log.Fatalln(err)
+		sugar.Panicf("error Read Config:%w", err)
 	}
-
-	readconfig.ReadConfig()
+	url := "yandex.ru"
+	sugar.Errorw("eRROR MESSAGE",
+		"url", url,
+		"attempt", 3,
+		"backoff", time.Second,
+	)
+	sugar.Warnw("eRROR MESSAGE",
+		"url", url,
+		"attempt", 3,
+		"backoff", time.Second,
+	)
 }
