@@ -1,4 +1,11 @@
 LOCAL_BIN:=$(CURDIR)/bin
+SHELL := /bin/bash
+KIND := kindest/node:v1.29.1
+KIND_CLUSTER := shop-cluster
+BASE_IMAGE_NAME := shop
+SERVICE_NAME := order
+VERSION := 0.0.1
+SERVICE_IMAGE := $(BASE_IMAGE_NAME)/$(SERVICE_NAME):$(VERSION)
 
 install-golangci-lint:
 	GOBIN=$(LOCAL_BIN) go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.53.3
@@ -12,6 +19,24 @@ docker-local-build-and-run:
 	-docker rmi order:v0.0.1
 	docker buildx build --no-cache --platform linux/amd64 -t order:v0.0.1 .
 	docker run --name order -p 50051:50051 order:v0.0.1
+
+dev-up:
+	kind create cluster \
+		--image $(KIND) \
+		--name $(KIND_CLUSTER) \
+		--config infra/k8s/dev/kind-config.yaml
+	
+dev-down:
+	kind delete cluster --name $(KIND_CLUSTER)
+
+img:
+	docker build \
+		-f infra/docker/order.dockerfile \
+		-t $(SERVICE_IMAGE) \
+		.
+
+dev-load:
+	kind load docker-image $(SERVICE_NAME) --name $(KIND_CLUSTER)
 
 # install-deps:
 # 	GOBIN=$(LOCAL_BIN) go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1
