@@ -36,7 +36,7 @@ img:
 		.
 
 dev-load:
-	kind load docker-image $(SERVICE_NAME) --name $(KIND_CLUSTER)
+	kind load docker-image $(SERVICE_IMAGE) --name $(KIND_CLUSTER)
 
 # install-deps:
 # 	GOBIN=$(LOCAL_BIN) go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1
